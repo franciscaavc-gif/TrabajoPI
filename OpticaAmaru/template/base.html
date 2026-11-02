@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Amaru Óptica{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --amaru-orange: #F26A21;
+            --text-dark: #2D2D2D;
+            --text-gray: #6C757D;
+            --danger-red: #DC3545;
+            --ok-green: #198754;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: #E9ECEF; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .mobile-app {
+            width: 100%; max-width: 400px; height: 100vh; max-height: 800px;
+            background-color: #F4F6F8; display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .header {
+            background-color: var(--amaru-orange); color: white; padding: 15px;
+            display: flex; align-items: center; gap: 15px; font-weight: bold;
+        }
+        .header a { color: white; font-size: 18px; text-decoration: none; }
+
+        .content { padding: 20px; flex-grow: 1; overflow-y: auto; }
+
+        .stack { display: flex; flex-direction: column; gap: 12px; }
+
+        .section-title {
+            font-size: 12px; font-weight: bold; color: var(--amaru-orange);
+            text-transform: uppercase; margin-top: 4px; letter-spacing: 0.5px;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .input-group { display: flex; flex-direction: column; gap: 3px; }
+        .input-group label { font-size: 11px; font-weight: 600; color: var(--text-dark); }
+        .input-group input, .input-group select {
+            padding: 8px 10px; border: 1px solid #CED4DA; border-radius: 8px;
+            font-size: 13px; background-color: white; outline: none; width: 100%;
+        }
+        .input-group input:focus, .input-group select:focus { border-color: var(--amaru-orange); }
+
+        .field-error, .form-error { font-size: 11px; color: var(--danger-red); }
+        .form-error { background: #F8D7DA; border-radius: 6px; padding: 8px 10px; }
+
+        .btn-primary {
+            width: 100%; background: var(--text-dark); color: white; padding: 15px; border: none;
+            border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 20px;
+        }
+        .btn-next {
+            width: 100%; background-color: var(--amaru-orange); color: white; border: none;
+            padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            cursor: pointer; margin: 5px 0 15px; box-shadow: 0 4px 10px rgba(242, 106, 33, 0.2);
+        }
+        .link-secondary {
+            display: block; text-align: center; color: var(--text-gray); font-size: 13px;
+            margin-top: 12px; text-decoration: none;
+        }
+
+        @media (min-width: 401px) { .mobile-app { border-radius: 20px; border: 8px solid #2D2D2D; } }
+    </style>
+</head>
+<body>
+    <div class="mobile-app">
+        <div class="header">
+            {% block back %}{% endblock %}
+            <span>{% block header_title %}Amaru Óptica{% endblock %}</span>
+        </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

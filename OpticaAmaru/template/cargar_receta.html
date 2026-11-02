@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Amaru Óptica - Carga de Receta{% endblock %}
+{% block header_title %}Adjuntar Receta{% endblock %}
+
+{% block content %}
+<style>
+    .alert-box { background-color: #F8D7DA; border-left: 4px solid var(--danger-red); padding: 12px; border-radius: 4px; margin-bottom: 20px; font-size: 11px; color: #721C24; line-height: 1.4; }
+    .alert-box strong { color: var(--danger-red); font-size: 12px; }
+    .upload-options { display: flex; gap: 10px; margin-bottom: 8px; }
+    .btn-upload { flex: 1; background: #F8F9FA; border: 2px dashed #CED4DA; border-radius: 10px; padding: 20px 10px; text-align: center; color: var(--text-dark); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; font: inherit; }
+    .btn-upload i { font-size: 28px; color: var(--amaru-orange); }
+    .btn-upload span { font-size: 12px; font-weight: 600; }
+    .btn-upload .hint { font-size: 9px; color: gray; font-weight: normal; }
+    .archivo-nombre { font-size: 12px; color: var(--ok-green); margin-bottom: 8px; word-break: break-all; }
+    .date-group { margin-top: 15px; }
+</style>
+
+<div class="alert-box">
+    <strong><i class="fa-solid fa-triangle-exclamation"></i> Regla Médica Estricta</strong><br>
+    Por normativa, no se fabricarán lentes sin receta o con una antigüedad <b>superior a {{ vigencia_dias }} días</b>. El sistema validará la fecha del documento.
+</div>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {{ form.archivo }}
+
+    <div class="upload-options">
+        <button type="button" class="btn-upload" data-modo="foto">
+            <i class="fa-solid fa-camera"></i>
+            <span>Tomar Foto</span>
+            <span class="hint">Usar cámara del celular</span>
+        </button>
+        <button type="button" class="btn-upload" data-modo="pdf">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>Subir PDF</span>
+            <span class="hint">Buscar en archivos</span>
+        </button>
+    </div>
+    <p class="archivo-nombre" id="archivo-nombre"></p>
+    {% for error in form.archivo.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+
+    <div class="date-group">
+        {% include "_campo.html" with field=form.fecha_emision %}
+    </div>
+
+    {% for error in form.non_field_errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+
+    <button type="submit" class="btn-primary">Validar y Continuar</button>
+</form>
+
+<script>
+    const input = document.getElementById('{{ form.archivo.id_for_label }}');
+    const nombre = document.getElementById('archivo-nombre');
+
+    document.querySelectorAll('[data-modo]').forEach(function (boton) {
+        boton.addEventListener('click', function () {
+            if (boton.dataset.modo === 'foto') {
+                input.accept = 'image/*';
+                input.setAttribute('capture', 'environment');  // cámara trasera
+            } else {
+                input.accept = 'application/pdf';
+                input.removeAttribute('capture');
+            }
+            input.click();
+        });
+    });
+
+    input.addEventListener('change', function () {
+        nombre.textContent = input.files.length ? 'Archivo seleccionado: ' + input.files[0].name : '';
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Amaru Óptica - Detalle Receta{% endblock %}
+{% block header_title %}Detalle de Receta y Óptica{% endblock %}
+{% block back %}<a href="#" onclick="history.back(); return false;" aria-label="Volver"><i class="fa-solid fa-arrow-left"></i></a>{% endblock %}
+
+{% block content %}
+<form method="post" class="stack" novalidate>
+    {% csrf_token %}
+
+    {% for error in form.non_field_errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+
+    <div class="section-title">1. Parámetros Oftalmológicos (Ojos)</div>
+
+    <div class="grid-2">
+        {% include "_campo.html" with field=form.esfera_od %}
+        {% include "_campo.html" with field=form.esfera_oi %}
+    </div>
+    <div class="grid-2">
+        {% include "_campo.html" with field=form.cilindro_od %}
+        {% include "_campo.html" with field=form.cilindro_oi %}
+    </div>
+    <div class="grid-2">
+        {% include "_campo.html" with field=form.eje_od %}
+        {% include "_campo.html" with field=form.eje_oi %}
+    </div>
+
+    <div class="section-title">2. Preferencias de Montura y Color</div>
+
+    {% include "_campo.html" with field=form.tipo_montura %}
+
+    <div class="grid-2">
+        {% include "_campo.html" with field=form.color_armazon %}
+        {% include "_campo.html" with field=form.tratamiento_cristal %}
+    </div>
+
+    <div class="section-title">3. Referencia o Observaciones Clínicas</div>
+
+    {% include "_campo.html" with field=form.notas %}
+
+    <button type="submit" class="btn-next">
+        Guardar Especificaciones <i class="fa-solid fa-arrow-right"></i>
+    </button>
+</form>
+{% endblock %}

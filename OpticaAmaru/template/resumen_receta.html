@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Amaru Óptica - Resumen{% endblock %}
+{% block header_title %}Resumen de la Receta{% endblock %}
+{% block back %}<a href="{% url 'detalle_receta' receta.pk %}" aria-label="Volver"><i class="fa-solid fa-arrow-left"></i></a>{% endblock %}
+
+{% block content %}
+<style>
+    .tarjeta { background: white; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+    .tarjeta table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tarjeta th, .tarjeta td { padding: 6px 4px; text-align: left; border-bottom: 1px solid #F1F3F5; }
+    .tarjeta th { font-size: 11px; color: var(--text-gray); font-weight: 600; }
+    .tarjeta tr:last-child td { border-bottom: none; }
+    .estado-ok { color: var(--ok-green); font-weight: bold; }
+    .estado-vencida { color: var(--danger-red); font-weight: bold; }
+</style>
+
+<div class="tarjeta">
+    <div class="section-title">Receta</div>
+    <table>
+        <tr><th>Fecha de emisión</th><td>{{ receta.fecha_emision|date:"d-m-Y" }}</td></tr>
+        <tr><th>Válida hasta</th><td>{{ receta.fecha_vencimiento|date:"d-m-Y" }}</td></tr>
+        <tr><th>Estado</th><td>
+            {% if receta.vigente %}<span class="estado-ok">Vigente</span>{% else %}<span class="estado-vencida">Vencida</span>{% endif %}
+        </td></tr>
+        <tr><th>Documento</th><td><a href="{{ receta.archivo.url }}" target="_blank" rel="noopener">Ver archivo adjunto</a></td></tr>
+    </table>
+</div>
+
+<div class="tarjeta">
+    <div class="section-title">Parámetros oftalmológicos</div>
+    <table>
+        <tr><th></th><th>OD</th><th>OI</th></tr>
+        <tr>
+            <th>Esfera</th>
+            <td>{{ especificacion.esfera_od|stringformat:"+.2f" }}</td>
+            <td>{{ especificacion.esfera_oi|stringformat:"+.2f" }}</td>
+        </tr>
+        <tr>
+            <th>Cilindro</th>
+            <td>{% if especificacion.cilindro_od is not None %}{{ especificacion.cilindro_od|stringformat:"+.2f" }}{% else %}—{% endif %}</td>
+            <td>{% if especificacion.cilindro_oi is not None %}{{ especificacion.cilindro_oi|stringformat:"+.2f" }}{% else %}—{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Eje</th>
+            <td>{% if especificacion.eje_od is not None %}{{ especificacion.eje_od }}°{% else %}—{% endif %}</td>
+            <td>{% if especificacion.eje_oi is not None %}{{ especificacion.eje_oi }}°{% else %}—{% endif %}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="tarjeta">
+    <div class="section-title">Montura y cristal</div>
+    <table>
+        <tr><th>Montura</th><td>{{ especificacion.get_tipo_montura_display }}</td></tr>
+        <tr><th>Color</th><td>{{ especificacion.get_color_armazon_display }}</td></tr>
+        <tr><th>Tratamiento</th><td>{{ especificacion.get_tratamiento_cristal_display }}</td></tr>
+        {% if especificacion.notas %}<tr><th>Notas</th><td>{{ especificacion.notas }}</td></tr>{% endif %}
+    </table>
+</div>
+
+<a href="{% url 'detalle_receta' receta.pk %}" class="link-secondary">Editar especificaciones</a>
+<a href="{% url 'cargar_receta' %}" class="link-secondary">Cargar otra receta</a>
+{% endblock %}
